@@ -1,4 +1,9 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using Windows.ApplicationModel.Contacts;
+using Windows.UI.Xaml;
 using ScreamIt.Client.Data.Contracts;
 using ScreamIt.Client.Data.Model;
 
@@ -12,6 +17,8 @@ namespace ScreamIt
     public sealed partial class MainPage
     {
         private readonly ILocationService _locationService = new LocationService();
+        private readonly ILocalDataService _localDataService = new LocalDataService();
+        private ObservableCollection<Contact> _contacts = new ObservableCollection<Contact>();
 
         public MainPage()
         {
@@ -21,10 +28,31 @@ namespace ScreamIt
 
         public ILocationService LocationService => _locationService;
 
+        public ObservableCollection<Contact> Contacts => _contacts; 
+
         private async void MainPage_OnLoading(FrameworkElement sender, object args)
         {
-            await _locationService.InitializeLocationServiceAsync();
+            await LocationService.InitializeLocationServiceAsync();
+
             DataContext = this;
+        }
+
+        private async void PickContacts()
+        {
+            var contactPicker = new ContactPicker();
+            contactPicker.DesiredFieldsWithContactFieldType.Add(ContactFieldType.PhoneNumber);
+
+            var contacts = await contactPicker.PickContactsAsync();
+            
+            foreach (var contact in contacts)
+            {
+                Contacts.Add(contact);
+            }
+        }
+
+        private void OnPickContact(object sender, RoutedEventArgs e)
+        {
+            PickContacts();
         }
     }
 }

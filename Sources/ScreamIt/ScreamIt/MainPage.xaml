@@ -6,9 +6,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Loading="MainPage_OnLoading">
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Click="OnPickContact" Content="Invite friend"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock Text="{Binding LocationService.Latitude}" FontSize="36" Foreground="Black"/>
-        <TextBlock Text="{Binding LocationService.Longitude}" FontSize="36" Foreground="Black"/>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Latitude: "/>
+            <TextBlock Text="{Binding LocationService.Latitude}" />
+            <TextBlock Text="   Longitude: "/>
+            <TextBlock Text="{Binding LocationService.Longitude}" />
+        </StackPanel>
+        
+        <ItemsControl ItemsSource="{x:Bind Contacts}" Margin="10">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding FullName}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </StackPanel>
 </Page>
