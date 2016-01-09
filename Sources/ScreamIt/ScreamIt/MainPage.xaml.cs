@@ -1,7 +1,6 @@
-﻿using System;
-using System.Globalization;
-using Windows.Devices.Geolocation;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
+using ScreamIt.Client.Data.Contracts;
+using ScreamIt.Client.Data.Model;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -12,21 +11,20 @@ namespace ScreamIt
     /// </summary>
     public sealed partial class MainPage
     {
+        private readonly ILocationService _locationService = new LocationService();
+
         public MainPage()
         {
             InitializeComponent();
         }
 
-        private async void MainPage_OnLoaded(object sender, RoutedEventArgs e)
+
+        public ILocationService LocationService => _locationService;
+
+        private async void MainPage_OnLoading(FrameworkElement sender, object args)
         {
-            Geolocator geolocator = new Geolocator ();
-            var gps = await geolocator.GetGeopositionAsync();
-            
-            Latitude.Text = gps.Coordinate.Latitude.ToString(CultureInfo.CurrentCulture);
-            Longitude.Text = gps.Coordinate.Longitude.ToString(CultureInfo.CurrentCulture);
-
-            // Subscribe to the StatusChanged event to get updates of location status changes.
-
+            await _locationService.InitializeLocationServiceAsync();
+            DataContext = this;
         }
     }
 }

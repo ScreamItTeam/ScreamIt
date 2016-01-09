@@ -5,10 +5,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Loaded="MainPage_OnLoaded">
+    Loading="MainPage_OnLoading">
 
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock x:Name="Latitude"  Text="Hello world!" FontSize="36" Foreground="Black"/>
-        <TextBlock x:Name="Longitude" FontSize="36" Foreground="Black"/>
+        <TextBlock Text="{Binding LocationService.Latitude}" FontSize="36" Foreground="Black"/>
+        <TextBlock Text="{Binding LocationService.Longitude}" FontSize="36" Foreground="Black"/>
     </StackPanel>
 </Page>
