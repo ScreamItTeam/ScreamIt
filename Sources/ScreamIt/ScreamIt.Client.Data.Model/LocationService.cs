@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.UI.Core;
-using Windows.UI.Xaml;
 using ScreamIt.Client.Data.Contracts;
 using ScreamIt.Client.Data.Model.Annotations;
 
@@ -13,7 +12,7 @@ namespace ScreamIt.Client.Data.Model
     public class LocationService : ILocationService, INotifyPropertyChanged
     {
         private GeolocationAccessStatus _accessStatus;
-        private Geolocator _geolocator = new Geolocator { DesiredAccuracyInMeters = 25, MovementThreshold = 100 };
+        private Geolocator _geolocator = new Geolocator { DesiredAccuracyInMeters = 5, MovementThreshold = 100 };
         private double _latitude;
         private double _longitude;
 
@@ -29,8 +28,6 @@ namespace ScreamIt.Client.Data.Model
 
                         _geolocator.StatusChanged += OnStatusChanged;
                         _geolocator.PositionChanged += OnGeolocatorPositionChanged;
-
-
                         break;
 
                     case GeolocationAccessStatus.Denied:
@@ -71,7 +68,7 @@ namespace ScreamIt.Client.Data.Model
         public double Latitude
         {
             get { return _latitude; }
-            set
+            private set
             {
                 if (_latitude.Equals(value))
                     return;
@@ -84,7 +81,7 @@ namespace ScreamIt.Client.Data.Model
         public double Longitude
         {
             get { return _longitude; }
-            set
+            private set
             {
                 if (_longitude.Equals(value))
                     return;

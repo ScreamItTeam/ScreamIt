@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using Windows.ApplicationModel.Contacts;
 using Windows.UI.Xaml;
 using ScreamIt.Client.Data.Contracts;
@@ -16,9 +14,8 @@ namespace ScreamIt
     /// </summary>
     public sealed partial class MainPage
     {
-        private readonly ILocationService _locationService = new LocationService();
         private readonly ILocalDataService _localDataService = new LocalDataService();
-        private ObservableCollection<Contact> _contacts = new ObservableCollection<Contact>();
+        private ObservableCollection<Contact> _contacts;
 
         public MainPage()
         {
@@ -26,14 +23,13 @@ namespace ScreamIt
         }
 
 
-        public ILocationService LocationService => _locationService;
+        public ILocationService LocationService { get; } = new LocationService();
 
-        public ObservableCollection<Contact> Contacts => _contacts; 
+        public ObservableCollection<Contact> Contacts => _contacts ?? (_contacts = new ObservableCollection<Contact>());
 
         private async void MainPage_OnLoading(FrameworkElement sender, object args)
         {
             await LocationService.InitializeLocationServiceAsync();
-
             DataContext = this;
         }
 
